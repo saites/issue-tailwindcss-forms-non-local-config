@@ -1,10 +1,10 @@
-# issue-tailwindcss-forms-non-local-config
-Minimal example repo demonstrating issue with @tailwindcss/forms.
-Created as required to open [this issue](https://github.com/tailwindlabs/tailwindcss-forms/issues/124).
+# Issue: `@tailwindcss/forms` does not work with `--config` in another directory
+This is a minimal example repo demonstrating an issue using `tailwindcss` with `@tailwindcss/forms`.
+It was created as required to open [this issue](https://github.com/tailwindlabs/tailwindcss-forms/issues/124).
 
 The only difference between the working and failing example is that
 the failing example uses a non-local config file,
-whereas the working on uses a config file in the same directory:
+whereas the working one uses a config file in the same directory:
 
 ```commandline
 [19:42]> diff works.sh fails.sh 
@@ -96,3 +96,19 @@ Require stack:
 Node.js v18.6.0
 ```
 
+## Workaround
+The issue can be resolved by modifying the `tailwind.config.js` file with an absolute path to the `node_modules` directory:
+
+```
+module.exports = { 
+  content: ["/code/**/*.{html,js}"],
+  theme: {
+    extend: {}, 
+  },  
+  plugins: [
+    require('/app/node_modules/@tailwindcss/forms'),
+  ],  
+}
+```
+
+With this change, both scripts succeed.
